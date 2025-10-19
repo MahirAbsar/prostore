@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
+import { APP_NAME } from "@/lib/constants";
 
 export const metadata = {
   title: "Home",
 };
 const Homepage = () => {
-  return <Button>Button</Button>;
+  return <>{APP_NAME}</>;
 };
 
 export default Homepage;
