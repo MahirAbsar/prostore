@@ -10,12 +10,20 @@ import { APP_NAME } from "@/lib/constants";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metaData: Metadata = {
   title: "Sign In",
 };
 
-const SignIn = () => {
+const SignIn = async () => {
+  const session = await auth();
+
+  if (session) {
+    redirect("/");
+  }
+
   return (
     <div className="w-full max-w-md mx-auto">
       <Card>

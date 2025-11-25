@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { hash } from "bcrypt-ts-edge";
 import sampleData from "./sample-data";
 
 async function main() {
@@ -10,7 +11,14 @@ async function main() {
   await prisma.verificationToken.deleteMany();
 
   await prisma.product.createMany({ data: sampleData.products });
-  await prisma.user.createMany({ data: sampleData.users });
+  const users = [];
+  for (let i = 0; i < sampleData.users.length; i++) {
+    users.push({
+      ...sampleData.users[i],
+      password: await hash(sampleData.users[i].password, 10),
+    });
+  }
+  await prisma.user.createMany({ data: users });
 
   console.log("Database seeded successfully");
 }
