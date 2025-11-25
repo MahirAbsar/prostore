@@ -13,7 +13,6 @@ export async function signInWithCredentials(
       email: formData.get("email"),
       password: formData.get("password"),
     });
-    console.log("Here--->", user);
     await signIn("credentials", user);
     return { success: true, message: "Signed in successfully" };
   } catch (error) {

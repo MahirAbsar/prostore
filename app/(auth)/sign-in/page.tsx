@@ -7,21 +7,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { APP_NAME } from "@/lib/constants";
-import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
 
-export const metaData: Metadata = {
+export const metadata: Metadata = {
   title: "Sign In",
 };
 
-const SignIn = async () => {
+const SignIn = async (props: {
+  searchParams: Promise<{
+    callbackUrl: string
+  }>
+}) => {
+  const { callbackUrl } = await props.searchParams;
   const session = await auth();
 
   if (session) {
-    redirect("/");
+    redirect(callbackUrl || "/");
   }
 
   return (
