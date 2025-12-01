@@ -6,7 +6,7 @@ import {
   SheetTitle,
   Sheet,
 } from "@/components/ui/sheet";
-import { EllipsisVertical, ShoppingCart, UserIcon } from "lucide-react";
+import { EllipsisVertical, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import ModeToggle from "./mode-toggle";
 import UserButton from "./userButton";

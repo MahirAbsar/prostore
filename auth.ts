@@ -21,7 +21,10 @@ export const config: NextAuthConfig = {
           where: { email: credentials.email as string },
         });
         if (user && user.password) {
-          const isMatch = await compare(credentials.password as string, user.password);
+          const isMatch = await compare(
+            credentials.password as string,
+            user.password
+          );
           if (isMatch) {
             return {
               id: user.id,
@@ -38,10 +41,35 @@ export const config: NextAuthConfig = {
   callbacks: {
     async session({ session, user, trigger, token }: any) {
       session.user.id = token.sub;
-      if (trigger === "update") {
+      session.user.role = token.role;
+      session.user.name = token.name;
+
+      if (trigger === "update" && token.name) {
         session.user.name = user.name;
       }
       return session;
+    },
+    async jwt({ token, user, trigger, session }: any) {
+      if (user) {
+        token.role = user.role;
+
+        if (user.name === "NO_NAME") {
+          token.name = user.email.split("@")[0];
+
+          await prisma.user.update({
+            where: { id: user.id },
+            data: {
+              name: token.name,
+            },
+          });
+        }
+      }
+
+      if (session?.user.name && trigger === "update") {
+        token.name = session.user.name;
+      }
+
+      return token;
     },
   },
 };
